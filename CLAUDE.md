@@ -33,4 +33,5 @@ It is **not an AI app** — no LLM, no embeddings, no generated answers. SQLite 
 - **Docs:** planning docs live in `docs/`; only `README.md`, `progress.md`, `CLAUDE.md` at root.
 - **Archive, don't delete:** retired docs/artifacts go in `z_archive/` at the repo root (gitignored).
 - **Stack:** Streamlit UI · `app.py` + `indexer.py` · stdlib `sqlite3` FTS5 · index built in-memory at startup (`@st.cache_resource`). Keep it ~120–150 lines; resist scope creep.
-- **Status:** planning stage — no app code yet, repo not yet `git init`-ed.
+- **Environment:** uv-managed venv, Python 3.12 (`.python-version`). `uv sync` to set up; run with `uv run python indexer.py` / `uv run streamlit run app.py`. `pyproject.toml` + `uv.lock` are the source of truth; `requirements.txt` is the deploy mirror (kept in sync).
+- **Status:** early build — `indexer.py` done and validated (FTS5, golden set passes); `app.py` next. Repo initialized and pushed to the private remote.

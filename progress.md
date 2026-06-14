@@ -18,6 +18,7 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 ## Completed
 
 ### 2026-06-14
+- Set up uv environment: `pyproject.toml`, `.python-version` (3.12), `uv.lock`, `.venv/` (gitignored). `requirements.txt` kept as the deploy mirror. Re-ran indexer self-checks in the venv — all pass on 3.12.
 - Built `indexer.py` + `requirements.txt`: parses the snapshot (Source markers → chapters, `## N.M` → sections), strips HTML/image/code-fence noise, loads 3,124 paragraph rows into in-memory FTS5. Self-checks pass: all 18 chapters, clean bodies, and all 9 golden queries return the expected section as the #1 result. Excerpt caps (≤5, ≤300 chars) verified.
 
 ### 2026-06-13

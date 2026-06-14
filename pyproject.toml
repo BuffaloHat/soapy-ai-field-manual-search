@@ -1,0 +1,13 @@
+[project]
+name = "soapy-ai-field-manual-search"
+version = "0.1.0"
+description = "Gated, keyword-search-only showcase for the Soapy AI Field Manual (coverage + capped excerpts; no LLM)."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "streamlit>=1.40",
+]
+
+# This is an app, not a distributable package — don't try to build/install the project itself.
+[tool.uv]
+package = false
