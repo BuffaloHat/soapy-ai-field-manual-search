@@ -1,0 +1,5 @@
+# The corpus is the one secret in this repo — never commit it.
+# Keep the folder tracked (so the build's is_dir() guard passes on a fresh clone),
+# but ignore everything inside it: the manual snapshot and any built search index.
+*
+!.gitignore

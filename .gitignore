@@ -1,0 +1,39 @@
+# --- The one secret: the manual corpus + built index ---
+# data/ contents are also ignored by data/.gitignore (which keeps the folder itself
+# tracked so the build's is_dir() guard passes). These rules are belt-and-suspenders:
+# the manual prose and any search index must NEVER be committed to this public repo.
+data/soapy_ai_manual.md
+data/*.db
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Personal archive of retired docs/artifacts ---
+z_archive/
+
+# --- Secrets (Streamlit password, env) ---
+.streamlit/secrets.toml
+.env
+.env.*
+*.local
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+build/
+dist/
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
