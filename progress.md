@@ -6,8 +6,9 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 
 ## Next steps
 
-1. **`app.py`** — password gate + two-layer search UI (coverage first, capped excerpts); convert excerpt highlight markers (`\x02`/`\x03`) to markup; run locally.
-2. **Tests** — promote the `indexer.py` self-checks into a `pytest` fixture ([docs/eval_plan.md](docs/eval_plan.md) §6 Phase 2).
+1. **See it in a browser** — `uv run streamlit run app.py`; sanity-check the result layout; capture screenshots for the README.
+2. **Tests** — promote the `indexer.py` self-checks + the `app.py` AppTest smoke checks into a `pytest` suite ([docs/eval_plan.md](docs/eval_plan.md) §6 Phase 2).
+3. **Resolve OQ5/OQ6** (deploy target + private-corpus delivery), then deploy gated.
 
 ## Backlog
 
@@ -18,6 +19,7 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 ## Completed
 
 ### 2026-06-14
+- Built `app.py`: Streamlit password gate (shared password via `st.secrets`/env) + two-layer search UI — coverage grouped by chapter, then capped highlighted excerpts. Verified end-to-end with Streamlit `AppTest` (gate, `MCP`→12.7 coverage, `<mark>` highlights, no-results + low-signal states). Added `.streamlit/secrets.toml.example`; real secrets gitignored. `indexer.build_index` now uses `check_same_thread=False` for the cached connection.
 - Set up uv environment: `pyproject.toml`, `.python-version` (3.12), `uv.lock`, `.venv/` (gitignored). `requirements.txt` kept as the deploy mirror. Re-ran indexer self-checks in the venv — all pass on 3.12.
 - Built `indexer.py` + `requirements.txt`: parses the snapshot (Source markers → chapters, `## N.M` → sections), strips HTML/image/code-fence noise, loads 3,124 paragraph rows into in-memory FTS5. Self-checks pass: all 18 chapters, clean bodies, and all 9 golden queries return the expected section as the #1 result. Excerpt caps (≤5, ≤300 chars) verified.
 

@@ -137,7 +137,9 @@ def parse_corpus(path: Path = DATA_FILE) -> List[Paragraph]:
 def build_index(paragraphs: Optional[List[Paragraph]] = None) -> sqlite3.Connection:
     if paragraphs is None:
         paragraphs = parse_corpus()
-    con = sqlite3.connect(":memory:")
+    # check_same_thread=False: the index is read-only and shared across Streamlit's
+    # per-session script threads via @st.cache_resource.
+    con = sqlite3.connect(":memory:", check_same_thread=False)
     con.row_factory = sqlite3.Row
     con.execute(
         """CREATE VIRTUAL TABLE sections USING fts5(
