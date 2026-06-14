@@ -6,8 +6,8 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 
 ## Next steps
 
-1. **`indexer.py`** (+ `requirements.txt`) — parse `data/soapy_ai_manual.md` → SQLite FTS5; verify against the golden set + integrity checks ([docs/eval_plan.md](docs/eval_plan.md) §2, §5).
-2. **`app.py`** — password gate + two-layer search UI (coverage first, capped excerpts); run locally.
+1. **`app.py`** — password gate + two-layer search UI (coverage first, capped excerpts); convert excerpt highlight markers (`\x02`/`\x03`) to markup; run locally.
+2. **Tests** — promote the `indexer.py` self-checks into a `pytest` fixture ([docs/eval_plan.md](docs/eval_plan.md) §6 Phase 2).
 
 ## Backlog
 
@@ -16,6 +16,9 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 - Expand the golden query set to ~20–30 entries.
 
 ## Completed
+
+### 2026-06-14
+- Built `indexer.py` + `requirements.txt`: parses the snapshot (Source markers → chapters, `## N.M` → sections), strips HTML/image/code-fence noise, loads 3,124 paragraph rows into in-memory FTS5. Self-checks pass: all 18 chapters, clean bodies, and all 9 golden queries return the expected section as the #1 result. Excerpt caps (≤5, ≤300 chars) verified.
 
 ### 2026-06-13
 - Drafted `README.md` (first pass): pitch, manual contents, architecture, content/access model; dummy live link + screenshot placeholder.

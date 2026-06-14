@@ -1,0 +1,2 @@
+streamlit>=1.40
+# Search uses the Python standard library (sqlite3 with FTS5) — no extra deps.
