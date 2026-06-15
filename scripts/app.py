@@ -39,8 +39,23 @@ IMAGE_PATH = Path(__file__).parent / "images" / "soapy_manual.jpeg"
 
 DESCRIPTION = (
     "A gated, keyword-search view of a private field manual on building AI/LLM "
-    "systems. Search a topic to see which chapters and sections cover it, plus a "
-    "few short excerpts. Keyword search only — no AI answers."
+    "systems. Keyword search only — no AI answers."
+)
+
+# Intro shown at the top of the Search tab.
+SEARCH_INTRO = (
+    "Search a topic to see which chapters and sections cover it, plus a few short excerpts."
+)
+
+# Overview, lifted from the manual's front matter (## Overview) for the About tab.
+OVERVIEW = (
+    "This is a field manual for building AI systems that work in practice. It is written to "
+    "support linear learning from LLM foundations through AI application deployment, while "
+    "still being useful as a reference when working on a specific project.\n\n"
+    "The emphasis is implementation reality: clear mental models, practical decisions, and "
+    "procedures that hold up across changing tools. When a specific tool materially changes a "
+    "decision, this guide names it. When a concept is more durable than a tool, the concept "
+    "takes priority."
 )
 
 # Parts → (chapter number, chapter title). Sections are intentionally omitted here.
@@ -90,6 +105,17 @@ mark { background: #ffe39c; padding: 0 2px; border-radius: 2px; }
 /* Manual Contents */
 .contents-part { font-weight: 700; margin: .25rem 0 .15rem 0; }
 .contents-chap { color: #444; }
+/* Tabs — house style */
+.stTabs [data-baseweb="tab-list"] { gap: 8px; border-bottom: 2px solid #e0e0e0; }
+.stTabs [data-baseweb="tab"] {
+    height: 48px; padding: 0 28px; border-radius: 6px 6px 0 0;
+    font-size: 16px; font-weight: 600; color: #555;
+    background-color: #f5f5f5; border: 1px solid #e0e0e0; border-bottom: none;
+}
+.stTabs [aria-selected="true"] {
+    background-color: #ff4b4b !important; color: white !important; border-color: #ff4b4b !important;
+}
+.stTabs [data-baseweb="tab"]:hover { background-color: #ffe5e5; color: #ff4b4b; }
 </style>
 """
 
@@ -130,21 +156,26 @@ def render_header() -> None:
         st.markdown("<p class='app-desc'>%s</p>" % DESCRIPTION, unsafe_allow_html=True)
 
 
-def render_contents() -> None:
-    with st.expander("Manual Contents — Parts & Chapters", expanded=True):
-        cols = st.columns(2)
-        half = (len(PARTS) + 1) // 2
-        for idx, (part_label, chapters) in enumerate(PARTS):
-            target = cols[0] if idx < half else cols[1]
-            chap_md = "<br>".join(
-                "<span class='contents-chap'><b>%d</b>&nbsp; %s</span>" % (n, html.escape(t))
-                for n, t in chapters
-            )
-            target.markdown(
-                "<div class='contents-part'>%s</div>%s<div style='margin-bottom:.6rem'></div>"
-                % (html.escape(part_label), chap_md),
-                unsafe_allow_html=True,
-            )
+def render_chapters_tab() -> None:
+    st.markdown("#### Manual Contents — Parts & Chapters")
+    cols = st.columns(2)
+    half = (len(PARTS) + 1) // 2
+    for idx, (part_label, chapters) in enumerate(PARTS):
+        target = cols[0] if idx < half else cols[1]
+        chap_md = "<br>".join(
+            "<span class='contents-chap'><b>%d</b>&nbsp; %s</span>" % (n, html.escape(t))
+            for n, t in chapters
+        )
+        target.markdown(
+            "<div class='contents-part'>%s</div>%s<div style='margin-bottom:.6rem'></div>"
+            % (html.escape(part_label), chap_md),
+            unsafe_allow_html=True,
+        )
+
+
+def render_about_tab() -> None:
+    st.markdown("#### Overview")
+    st.markdown(OVERVIEW)
 
 
 def _attempt_login() -> None:
@@ -205,6 +236,7 @@ def render_excerpts(excerpts) -> None:
 
 
 def render_search() -> None:
+    st.markdown("<p class='app-desc'>%s</p>" % SEARCH_INTRO, unsafe_allow_html=True)
     con = get_index()
     with st.form("search"):
         query = st.text_input("Search the manual", key="search",
@@ -240,8 +272,13 @@ def main() -> None:
         render_gate()
         return
 
-    render_contents()
-    render_search()
+    tab_search, tab_chapters, tab_about = st.tabs(["Search", "Chapters", "About"])
+    with tab_search:
+        render_search()
+    with tab_chapters:
+        render_chapters_tab()
+    with tab_about:
+        render_about_tab()
 
 
 if __name__ == "__main__":
