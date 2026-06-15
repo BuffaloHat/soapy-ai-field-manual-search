@@ -55,6 +55,9 @@ BACKTICK_RE = re.compile(r"`+")           # inline code backticks
 # Front matter that must not be indexed (would create fake coverage hits).
 SKIP_SOURCES = ("00_title_page", "toc")
 
+# Reference-scaffolding sections excluded from search (table-heavy tool lists / field cards).
+SKIP_SECTION_RE = re.compile(r"field cards", re.IGNORECASE)
+
 STOPWORDS = {
     "the", "a", "an", "and", "or", "of", "to", "in", "is", "it", "on", "for",
     "with", "as", "at", "by", "be", "this", "that", "are", "was", "from",
@@ -113,6 +116,7 @@ def parse_corpus(path: Path = DATA_FILE) -> List[Paragraph]:
         section_title = ""
         buf: List[str] = []
         in_fence = False
+        skip_section = False
 
         def flush() -> None:
             text = re.sub(r"\s+", " ", " ".join(buf)).strip()
@@ -137,7 +141,10 @@ def parse_corpus(path: Path = DATA_FILE) -> List[Paragraph]:
             if sm:
                 flush()
                 section_number, section_title = sm.group(1), sm.group(2).strip()
+                skip_section = bool(SKIP_SECTION_RE.search(section_title))
                 continue
+            if skip_section:
+                continue  # excluded section — index nothing until the next section heading
             if line.strip() == "":
                 flush()
                 continue

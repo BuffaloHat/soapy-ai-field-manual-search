@@ -56,6 +56,7 @@ Anything outside this contract (HTML wrapper divs, image links, attachment refs)
   - Strip HTML wrapper divs (`title-page`, `chapter-break`, etc.).
   - Strip image/attachment markdown (`![...](...)`) and bare attachment links.
   - Strip inline markdown emphasis (`**`/`*`), inline-code backticks, and leading list markers.
+  - Exclude reference-scaffolding sections ("Tools and Field Cards") — table-heavy, low showcase value; removed from coverage and excerpts alike (like the title page / TOC).
   - Drop empty/structural-only fragments.
 - **Excerpts:** a centered ~700-char window around the match (context before and after), with all query terms highlighted. Capped at 5 per query, one per section.
 - **Index:** SQLite FTS5, BM25 ranking. Built **in-memory at startup**, cached with `@st.cache_resource`. Rebuild is instant (tiny corpus); never stale relative to the snapshot it loaded.
