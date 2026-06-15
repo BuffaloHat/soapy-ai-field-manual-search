@@ -69,7 +69,7 @@ saifm/  (public)
                             mirrored in by the manual's build_manuscript.py
 ```
 
-**The protection model in one line:** the code is public; the corpus is private; anything rendered to a browser is capped (≤~300 chars/excerpt, ≤~5 excerpts/query, no browse). A determined scraper is explicitly out of scope — see [prd.md](prd.md) §Content-Protection.
+**The protection model in one line:** the code is public; the corpus is private; anything rendered to a browser is capped (≤~700 chars/excerpt, ≤~5 excerpts/query, no browse). A determined scraper is explicitly out of scope — see [prd.md](prd.md) §Content-Protection.
 
 ---
 

@@ -60,7 +60,7 @@ Leading with structure is both the strongest pitch (it shows how thoroughly the 
 - **M2.** Index only authored, current chapter content — the **latest `vN` per chapter**, excluding outlines, editorials, and `sources/`. *Satisfied at build time:* the corpus is the `build_manuscript.py` snapshot, which already performs this selection (see [data_inventory.md](data_inventory.md) §1). saifm trusts the snapshot rather than re-implementing discovery.
 - **M3.** Perform exact-keyword search (no embeddings / semantic match).
 - **M4.** Return the coverage layer (matching section numbers + titles) for every query.
-- **M5.** Cap exposed prose: max ~300 characters per excerpt, max ~5 excerpts per query; no pagination, no "show full section," no browse-all. (Exact caps: OQ3.)
+- **M5.** Cap exposed prose: max ~700 characters per excerpt, max ~5 excerpts per query; no pagination, no "show full section," no browse-all. Excerpts are a centered window (context before and after the match).
 - **M6.** Keep the full corpus server-side; send only the gate result and the capped excerpts to the browser.
 
 **Should**
@@ -128,7 +128,7 @@ The structural decisions are now settled; see [overview.md](overview.md) §3 for
 Already resolved: repo placement (standalone public repo), content sync (push-on-build mirror of `soapy_ai_manual.md`), agent-context file (`CLAUDE.md`).
 
 Still open:
-- **OQ3. Exact caps.** Final chars-per-excerpt and excerpts-per-query (placeholders: ~300 / ~5).
+- **OQ3. Exact caps.** ~700 chars/excerpt × 5 excerpts (chosen 2026-06-14). Revisit if excerpt context work changes the exposure profile.
 - **OQ4. Coverage display depth.** Show every matching section, or top N? Show a match count per chapter?
 - **OQ5. Deploy target.** Streamlit Community Cloud vs. alternative.
 - **OQ6. Private-corpus delivery to host.** The corpus can't live in the public repo, but the running app needs it. Options: bake it into a deploy image from a private source, fetch it at startup from private storage, or build the index locally and ship only the DB. This is the one real deploy knot (also tracked as DI-3). **Gates first deploy, not local development.**

@@ -46,7 +46,7 @@ A small, hand-curated set of queries with **expected coverage** — the sections
 
 These guard the content-protection model (PRD §7). Treat any failure as release-blocking.
 
-- **P1 — Char cap.** No returned excerpt exceeds the configured max (~300 chars). Assert on raw response, not just rendered text.
+- **P1 — Char cap.** No returned excerpt exceeds the configured max (~700 chars, excluding highlight markers). Assert on raw response, not just rendered text.
 - **P2 — Count cap.** No query returns more than the configured max excerpts (~5).
 - **P3 — No whole-section leak.** Concatenating all excerpts for one query never reconstructs a full section; there is no parameter (page, offset, "show more") that returns additional prose.
 - **P4 — Server-side only.** The client response contains only the gate result, coverage labels, and capped excerpts — never the raw corpus or a section body. Inspect the actual payload.

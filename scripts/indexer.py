@@ -25,8 +25,12 @@ DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "soapy_ai_manual.m
 
 # --- Output caps (PRD M5) ---
 MAX_EXCERPTS = 5
-MAX_EXCERPT_CHARS = 300
+MAX_EXCERPT_CHARS = 700
 MAX_COVERAGE_SECTIONS = 20
+
+# Sentinel markers wrapped around matched terms; app.py converts them to <mark>…</mark>.
+HL_OPEN = "\x02"
+HL_CLOSE = "\x03"
 
 # --- Format-contract patterns (see docs/data_inventory.md §2) ---
 SOURCE_RE = re.compile(r"^<!--\s*Source:\s*(.+?)\s*-->")
@@ -164,13 +168,50 @@ def build_index(paragraphs: Optional[List[Paragraph]] = None) -> sqlite3.Connect
     return con
 
 
+def query_terms(query: str) -> List[str]:
+    """Meaningful (non-stopword, len>1) lowercased tokens from the raw query."""
+    tokens = re.findall(r"[A-Za-z0-9]+", query.lower())
+    return [t for t in tokens if len(t) > 1 and t not in STOPWORDS]
+
+
 def build_match_query(query: str) -> Optional[str]:
     """Turn raw user input into a safe FTS5 MATCH string, or None if low-signal (S3)."""
-    tokens = re.findall(r"[A-Za-z0-9]+", query.lower())
-    meaningful = [t for t in tokens if len(t) > 1 and t not in STOPWORDS]
-    if not meaningful:
+    terms = query_terms(query)
+    if not terms:
         return None
-    return " ".join('"%s"' % t for t in meaningful)  # AND-joined, each token quoted
+    return " ".join('"%s"' % t for t in terms)  # AND-joined, each token quoted
+
+
+def _make_excerpt(body: str, terms: List[str], max_chars: int) -> str:
+    """A ~max_chars window of `body` centered on the first matching term, with all
+    term occurrences wrapped in highlight markers. Context spans before and after."""
+    text = re.sub(r"\s+", " ", body).strip()
+    low = text.lower()
+    positions = [p for p in (low.find(t) for t in terms) if p != -1]
+    pos = min(positions) if positions else -1
+
+    if pos == -1:
+        start, end = 0, min(len(text), max_chars)
+    else:
+        start = max(0, pos - max_chars // 2)
+        end = min(len(text), start + max_chars)
+        start = max(0, end - max_chars)
+
+    # Snap to nearby word boundaries so we don't slice mid-word.
+    if start > 0:
+        nxt = text.find(" ", start)
+        if 0 <= nxt - start <= 30:
+            start = nxt + 1
+    if end < len(text):
+        prev = text.rfind(" ", start, end)
+        if prev > start and end - prev <= 30:
+            end = prev
+
+    window = text[start:end]
+    if terms:
+        pat = re.compile("(" + "|".join(re.escape(t) for t in terms) + ")", re.IGNORECASE)
+        window = pat.sub(lambda m: HL_OPEN + m.group(0) + HL_CLOSE, window)
+    return ("…" if start > 0 else "") + window + ("…" if end < len(text) else "")
 
 
 def search(con: sqlite3.Connection, query: str,
@@ -184,10 +225,10 @@ def search(con: sqlite3.Connection, query: str,
     match = build_match_query(query)
     if match is None:
         return None
+    terms = query_terms(query)
 
     rows = con.execute(
-        "SELECT chapter_num, chapter_title, section_number, section_title, "
-        "snippet(sections, 4, '\x02', '\x03', '…', 16) AS snip "
+        "SELECT chapter_num, chapter_title, section_number, section_title, body "
         "FROM sections WHERE sections MATCH ? ORDER BY rank",
         (match,),
     ).fetchall()
@@ -206,10 +247,8 @@ def search(con: sqlite3.Connection, query: str,
         # one excerpt per section, capped
         ekey = (r["chapter_num"], sec)
         if ekey not in seen_exc and len(excerpts) < max_excerpts:
-            snip = re.sub(r"\s+", " ", r["snip"]).strip()
-            if len(snip) > MAX_EXCERPT_CHARS:
-                snip = snip[:MAX_EXCERPT_CHARS].rstrip() + "…"
             seen_exc.add(ekey)
+            snip = _make_excerpt(r["body"], terms, MAX_EXCERPT_CHARS)
             excerpts.append((r["chapter_num"], sec, r["section_title"], snip))
 
     return coverage, excerpts
