@@ -50,13 +50,15 @@ Anything outside this contract (HTML wrapper divs, image links, attachment refs)
 
 `indexer.py` turns the snapshot into searchable rows:
 
-- **Granularity:** split by `Source` markers → chapters; by `##`/`###` headings → sections; by blank lines → paragraphs.
+- **Granularity:** split by `Source` markers → chapters; by `##`/`###` headings → sections; by blank lines → paragraphs. Sub-threshold paragraphs (< ~80 chars, e.g. subheading lead-ins) are merged into a same-section neighbor so excerpts carry context, not one-line fragments.
 - **Row shape:** `(chapter, section_number, heading, paragraph_text)`.
 - **Search-side cleaning (saifm's job, not the manual's):**
   - Strip HTML wrapper divs (`title-page`, `chapter-break`, etc.).
   - Strip image/attachment markdown (`![...](...)`) and bare attachment links.
+  - Strip inline markdown emphasis (`**`/`*`), inline-code backticks, and leading list markers.
   - Drop empty/structural-only fragments.
-- **Index:** SQLite FTS5, BM25 ranking, `snippet()` for highlighting. Built **in-memory at startup**, cached with `@st.cache_resource`. Rebuild is instant (tiny corpus); never stale relative to the snapshot it loaded.
+- **Excerpts:** a centered ~700-char window around the match (context before and after), with all query terms highlighted. Capped at 5 per query, one per section.
+- **Index:** SQLite FTS5, BM25 ranking. Built **in-memory at startup**, cached with `@st.cache_resource`. Rebuild is instant (tiny corpus); never stale relative to the snapshot it loaded.
 
 ---
 

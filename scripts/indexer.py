@@ -28,6 +28,10 @@ MAX_EXCERPTS = 5
 MAX_EXCERPT_CHARS = 700
 MAX_COVERAGE_SECTIONS = 20
 
+# Paragraphs shorter than this (e.g. subheading lead-ins) are merged into a neighbor
+# in the same section, so excerpts carry context instead of one-line fragments.
+MIN_PARAGRAPH_CHARS = 80
+
 # Sentinel markers wrapped around matched terms; app.py converts them to <mark>…</mark>.
 HL_OPEN = "\x02"
 HL_CLOSE = "\x03"
@@ -142,7 +146,49 @@ def parse_corpus(path: Path = DATA_FILE) -> List[Paragraph]:
                 buf.append(cleaned)
         flush()
 
-    return paragraphs
+    return _merge_short(paragraphs)
+
+
+def _join(a: Paragraph, b: Paragraph) -> Paragraph:
+    """Concatenate two paragraphs (a before b), keeping a's section identity."""
+    return Paragraph(a.chapter_num, a.chapter_title,
+                     a.section_number or b.section_number,
+                     a.section_title or b.section_title,
+                     (a.text + " " + b.text).strip())
+
+
+def _same_section(a: Paragraph, b: Paragraph) -> bool:
+    return (a.chapter_num, a.section_number) == (b.chapter_num, b.section_number)
+
+
+def _merge_short(paras: List[Paragraph], min_chars: int = MIN_PARAGRAPH_CHARS) -> List[Paragraph]:
+    """Fold sub-threshold paragraphs into a same-section neighbor (forward first,
+    else backward), so excerpts carry context rather than one-line fragments."""
+    out: List[Paragraph] = []
+    carry: Optional[Paragraph] = None
+    for p in paras:
+        if carry is not None:
+            if _same_section(carry, p):
+                p = _join(carry, p)        # lead-in merges into the following paragraph
+                carry = None
+            else:
+                _flush_carry(out, carry)   # no forward neighbor; settle the carry
+                carry = None
+        if len(p.text) < min_chars:
+            carry = p
+        else:
+            out.append(p)
+    if carry is not None:
+        _flush_carry(out, carry)
+    return out
+
+
+def _flush_carry(out: List[Paragraph], carry: Paragraph) -> None:
+    """A short paragraph with no forward neighbor: merge backward if possible, else keep."""
+    if out and _same_section(out[-1], carry):
+        out[-1] = _join(out[-1], carry)
+    else:
+        out.append(carry)
 
 
 def build_index(paragraphs: Optional[List[Paragraph]] = None) -> sqlite3.Connection:
