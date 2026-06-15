@@ -147,7 +147,7 @@ def render_header() -> None:
     col_img, col_title = st.columns([1, 4])
     with col_img:
         if IMAGE_PATH.exists():
-            st.image(str(IMAGE_PATH), width=180)
+            st.image(str(IMAGE_PATH), width=280)
     with col_title:
         st.markdown(
             "<h1 style='font-size: 2.8rem; margin-bottom: 0;'>Soapy AI Field Manual</h1>",
