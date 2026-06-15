@@ -20,7 +20,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-DATA_FILE = Path(__file__).resolve().parent / "data" / "soapy_ai_manual.md"
+# scripts/ lives one level below the repo root; the corpus is in <root>/data/.
+DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "soapy_ai_manual.md"
 
 # --- Output caps (PRD M5) ---
 MAX_EXCERPTS = 5

@@ -19,6 +19,7 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 ## Completed
 
 ### 2026-06-14
+- Housekeeping: moved code into `scripts/` (`app.py`, `indexer.py`); added [docs/z_scripts_inventory.md](docs/z_scripts_inventory.md); set default port 8503 via `.streamlit/config.toml`; fixed the indexer's corpus path for the new location.
 - Built `app.py`: Streamlit password gate (shared password via `st.secrets`/env) + two-layer search UI — coverage grouped by chapter, then capped highlighted excerpts. Verified end-to-end with Streamlit `AppTest` (gate, `MCP`→12.7 coverage, `<mark>` highlights, no-results + low-signal states). Added `.streamlit/secrets.toml.example`; real secrets gitignored. `indexer.build_index` now uses `check_same_thread=False` for the cached connection.
 - Set up uv environment: `pyproject.toml`, `.python-version` (3.12), `uv.lock`, `.venv/` (gitignored). `requirements.txt` kept as the deploy mirror. Re-ran indexer self-checks in the venv — all pass on 3.12.
 - Built `indexer.py` + `requirements.txt`: parses the snapshot (Source markers → chapters, `## N.M` → sections), strips HTML/image/code-fence noise, loads 3,124 paragraph rows into in-memory FTS5. Self-checks pass: all 18 chapters, clean bodies, and all 9 golden queries return the expected section as the #1 result. Excerpt caps (≤5, ≤300 chars) verified.

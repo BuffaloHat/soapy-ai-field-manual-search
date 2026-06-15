@@ -1,0 +1,6 @@
+# Project defaults (committed). Secrets live in the gitignored secrets.toml.
+[server]
+port = 8503          # 8501/8502 are used by other local Streamlit apps
+
+[browser]
+gatherUsageStats = false
