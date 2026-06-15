@@ -40,6 +40,9 @@ IMAGE_RE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
 LINK_RE = re.compile(r"\[([^\]]*)\]\([^)]*\)")
 HTML_TAG_RE = re.compile(r"<[^>]+>")
 HEADING_HASH_RE = re.compile(r"^#{1,6}\s*")
+BULLET_RE = re.compile(r"^\s*[-*+]\s+")  # leading list marker
+EMPHASIS_RE = re.compile(r"\*+")          # ** bold / * italic asterisks (underscores left intact)
+BACKTICK_RE = re.compile(r"`+")           # inline code backticks
 
 # Front matter that must not be indexed (would create fake coverage hits).
 SKIP_SOURCES = ("00_title_page", "toc")
@@ -64,6 +67,9 @@ def _clean(line: str) -> str:
     line = LINK_RE.sub(r"\1", line)
     line = HTML_TAG_RE.sub("", line)
     line = HEADING_HASH_RE.sub("", line)
+    line = BULLET_RE.sub("", line)      # drop leading list marker
+    line = EMPHASIS_RE.sub("", line)    # strip ** / * emphasis
+    line = BACKTICK_RE.sub("", line)    # strip inline-code backticks
     return line.strip()
 
 
@@ -245,7 +251,8 @@ def _selfcheck() -> int:
     print("I2 chapter 13 sections: %s" % ch13)
 
     # I3 — cleaning: no HTML/image/link residue in any body
-    bad = [p for p in paras if "<div" in p.text or "![" in p.text or "](" in p.text]
+    bad = [p for p in paras if "<div" in p.text or "![" in p.text or "](" in p.text
+           or "**" in p.text or "`" in p.text]
     print("I3 cleaning residue rows: %d %s" % (len(bad), "OK" if not bad else "FAIL"))
     failures += 1 if bad else 0
 
