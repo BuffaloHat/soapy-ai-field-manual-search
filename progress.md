@@ -6,9 +6,8 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 
 ## Next steps
 
-1. **Screenshots for the README** — capture the gated landing + a sample result now that the UI is in place.
+1. **Deploy (the keystone)** — resolve OQ5/OQ6 (host + how the private corpus *and* `manual_preview.pdf` reach it), deploy gated, then swap the live URL into the README.
 2. **Tests** — promote the `indexer.py` self-checks + the `app.py` AppTest smoke checks into a `pytest` suite ([docs/eval_plan.md](docs/eval_plan.md) §6 Phase 2).
-3. **Resolve OQ5/OQ6** (deploy target + private-corpus delivery), then deploy gated.
 
 ## Backlog
 
