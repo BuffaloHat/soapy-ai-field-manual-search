@@ -19,6 +19,7 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 ## Completed
 
 ### 2026-06-15
+- Added screenshots to the README: hero gated-landing shot + a Screenshots gallery (Search, Coverage, Excerpts, Manual Preview, About) in `scripts/images/`; refreshed the Status section. (A capped-excerpt screenshot intentionally shows a tame prose taste — consistent with the gated 25-page sample.)
 - UI formatting pass: bold/enlarged search intro + "Search the manual:" label; coverage/excerpts notes restyled as red-accent chips; bold per-excerpt section labels.
 - Added a **Manual Preview** tab (gated): downloadable 25-page Chapter 1 sample + the Parts/Chapters contents (folded in from the removed Chapters tab). Tabs now Search · Manual Preview · About. PDF lives gitignored in `data/manual_preview.pdf` — never committed. PRD §7 notes this intentional gated-sample exception. (Tried an inline PDF viewer — Chrome blocks data-URI PDFs, and image rendering felt off against the app's brevity — so settled on download + contents; `pymupdf` added then removed.)
 

@@ -6,9 +6,7 @@ The manual itself is a private work in progress. This app exists to answer one q
 
 **Live demo:** https://soapy-ai-field-manual-search.streamlit.app *(password-gated — access shared on request)*
 
-> **Note:** this is an early build. The README will evolve, and screenshots of the interface will be added once the UI is in place.
-
-<!-- SCREENSHOTS: add gated landing + a sample coverage/tidbit result once the UI exists -->
+![Soapy AI Field Manual — the gated landing](scripts/images/1_password.png)
 
 ---
 
@@ -22,6 +20,35 @@ Every search returns two layers, **coverage first**:
 Leading with structure is deliberate. The table of contents is the strongest summary of what the manual is, and it keeps the prose itself rationed.
 
 This is **not** an AI Q&A app. There is no model in the loop — no generated answers, no summarization, no embeddings. It is exact keyword search over a single corpus. (That choice is itself a design statement: the simplest tool that meets the goal.)
+
+---
+
+## Screenshots
+
+### Search — coverage first
+A topic query answers *"where does the manual cover this?"* before showing any prose.
+
+![The Search tab](scripts/images/2_search.png)
+
+### Coverage — matching sections, grouped by chapter
+The headline result: every matching chapter and section, by number and title — the manual's table-of-contents depth at a glance.
+
+![Coverage layer for a query](scripts/images/3_search_contents.png)
+
+### Excerpts — a capped, highlighted taste
+Beneath coverage, a few short, term-highlighted excerpts — hard-capped, never a full section.
+
+![Capped, highlighted excerpts](scripts/images/4_search_excerpts.png)
+
+### Manual Preview — proof it's a real document
+A downloadable sample of the actual manuscript (Chapter 1) plus the full Parts & Chapters map.
+
+![Manual Preview tab](scripts/images/5_manual.png)
+
+### About
+The manual's overview and intent.
+
+![About tab](scripts/images/6_about.png)
 
 ---
 
@@ -75,7 +102,7 @@ manual (private repo)  →  compiled snapshot  →  FTS5 index  →  gated searc
 
 ## Status
 
-Early build. The corpus pipeline and planning docs are in place; the search app is next. Planned: the search UI, a deployed gated demo, and interface screenshots in this README.
+The corpus pipeline, planning docs, and the gated search app (Search · Manual Preview · About) are built and validated. Next: deploy the gated demo and swap the placeholder above for the live URL.
 
 ---
 
