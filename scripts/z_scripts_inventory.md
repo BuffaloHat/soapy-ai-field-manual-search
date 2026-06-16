@@ -27,4 +27,4 @@ The Streamlit front end. Thin: gate + presentation over `indexer.search`.
 - **Gate** (PRD M1): single shared password from `st.secrets["app_password"]` (or `SAIFM_PASSWORD` env for local dev). Nothing below the gate renders until it passes.
 - **Search UI**: a query box → **Coverage** (matching sections grouped by chapter) then **Excerpts** (capped tidbits with the matched term highlighted via `<mark>`). Handles the no-results and low-signal states cleanly.
 - **Index**: built once per process with `@st.cache_resource`.
-- **Run:** `uv run streamlit run scripts/app.py` (defaults to port 8503 via `.streamlit/config.toml`).
+- **Run:** `uv run streamlit run scripts/app.py --server.port 8503` (local). The committed config doesn't pin a port (Streamlit Cloud needs its default 8501).

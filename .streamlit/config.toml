@@ -1,6 +1,8 @@
 # Project defaults (committed). Secrets live in the gitignored secrets.toml.
-[server]
-port = 8503          # 8501/8502 are used by other local Streamlit apps
-
+#
+# Do NOT pin server.port here: Streamlit Community Cloud health-checks the platform
+# default (8501), so a pinned port makes the deploy fail as "unhealthy". For local dev,
+# pass the port on the command line to avoid colliding with other local Streamlit apps:
+#   uv run streamlit run scripts/app.py --server.port 8503
 [browser]
 gatherUsageStats = false
