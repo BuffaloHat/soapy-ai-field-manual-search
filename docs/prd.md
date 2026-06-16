@@ -1,8 +1,7 @@
 # PRD — saifm (Soapy AI Field Manual Showcase)
 
 **Created:** 2026-06-13
-**Status:** Active draft — planning stage (no app code yet)
-**Author:** Matt Kennedy
+**Status:** Active
 **Companion docs:** [overview.md](overview.md) · [data_inventory.md](data_inventory.md) · [eval_plan.md](eval_plan.md) · [progress.md](../progress.md) · [CLAUDE.md](../CLAUDE.md)
 
 ---

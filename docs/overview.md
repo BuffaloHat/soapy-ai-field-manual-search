@@ -1,9 +1,8 @@
 # Overview — saifm (Soapy AI Field Manual Showcase)
 
 **Created:** 2026-06-13
-**Status:** Active — planning docs stage (no app code yet)
-**Author:** Matt Kennedy
-**Working name:** `saifm` (short for *Soapy AI Field Manual*). Renameable.
+**Status:** Active
+**Working name:** `saifm` (short for *Soapy AI Field Manual*).
 
 > Companion docs: [prd.md](prd.md) (requirements), [data_inventory.md](data_inventory.md) (corpus + refresh), [eval_plan.md](eval_plan.md) (how we judge it), [progress.md](../progress.md) (execution log), [CLAUDE.md](../CLAUDE.md) (agent context).
 

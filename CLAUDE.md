@@ -14,7 +14,7 @@ It is **not an AI app** — no LLM, no embeddings, no generated answers. SQLite 
 - [docs/prd.md](docs/prd.md) — requirements (M/S/May), content-protection model, open questions.
 - [docs/data_inventory.md](docs/data_inventory.md) — the corpus, the **format contract**, refresh.
 - [docs/eval_plan.md](docs/eval_plan.md) — deterministic checks (golden set, protection, integrity).
-- [progress.md](progress.md) — the user's working board. **Exactly three sections — Next steps, Backlog, Completed (newest → oldest); never add others.** Open questions live in the PRD, not here.
+- [progress.md](progress.md) — the project's working board. **Exactly three sections — Next steps, Backlog, Completed (newest → oldest); never add others.** Open questions live in the PRD, not here.
 
 ## Non-negotiables (don't break these)
 

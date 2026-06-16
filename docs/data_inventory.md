@@ -1,7 +1,6 @@
 # Data Inventory — saifm
 
 **Created:** 2026-06-13
-**Owner:** Matt Kennedy
 **Companion:** [overview.md](overview.md) · [prd.md](prd.md)
 
 This app indexes exactly **one corpus**: a prebuilt snapshot of the Soapy AI Field Manual. This doc records where it comes from, the contract it must satisfy, how it's refreshed, and how it's protected.
@@ -16,7 +15,7 @@ This app indexes exactly **one corpus**: a prebuilt snapshot of the Soapy AI Fie
 | **Size** | ~778 KB, ~11,140 lines, 21 source sections (title page, intro, TOC, chapters 1–18, glossary, planning examples) as of 2026-06-11. |
 | **Source of truth** | The **private** manual repo `soapy-ai-field-manual` (authored in Obsidian, synced via iCloud). saifm only *consumes* it. |
 | **Built by** | `build_manuscript.py` in the manual repo (`--mode review`), which writes `build/manuscript_review.md` + a manifest, then mirrors a copy into saifm (see §4). |
-| **Local source path** | `/Users/mattkennedy/Library/Mobile Documents/iCloud~md~obsidian/Documents/soapy_ai_field_manual/build/manuscript_review.md` |
+| **Local source path** | `<icloud-obsidian-vault>/soapy_ai_field_manual/build/manuscript_review.md` (a local, machine-specific path) |
 | **Where it lives in saifm** | `data/soapy_ai_manual.md` — **gitignored**, never committed to the public repo. |
 
 ### What the builder already guarantees (manual side)
@@ -81,7 +80,7 @@ The mirror step (appended to `build_manuscript.py`'s `main()`):
 
 ```python
 # Mirror an exact copy into the saifm showcase project, if present on this machine.
-saifm_dest = Path("/Users/mattkennedy/Projects/saifm/data/soapy_ai_manual.md")
+saifm_dest = Path("<local-saifm-checkout>/data/soapy_ai_manual.md")
 if saifm_dest.parent.is_dir():
     saifm_dest.write_text(manuscript)
     print(f"Mirrored manuscript to {saifm_dest}")
