@@ -14,7 +14,6 @@ It is **not an AI app** — no LLM, no embeddings, no generated answers. SQLite 
 - [docs/prd.md](docs/prd.md) — requirements (M/S/May), content-protection model, open questions.
 - [docs/data_inventory.md](docs/data_inventory.md) — the corpus, the **format contract**, refresh.
 - [docs/eval_plan.md](docs/eval_plan.md) — deterministic checks (golden set, protection, integrity).
-- [progress.md](progress.md) — the project's working board. **Exactly three sections — Next steps, Backlog, Completed (newest → oldest); never add others.** Open questions live in the PRD, not here.
 
 ## Non-negotiables (don't break these)
 
@@ -30,7 +29,7 @@ It is **not an AI app** — no LLM, no embeddings, no generated answers. SQLite 
 
 ## Conventions
 
-- **Docs:** planning docs live in `docs/`; only `README.md`, `progress.md`, `CLAUDE.md` at root.
+- **Docs:** planning docs live in `docs/`; `README.md` and `CLAUDE.md` are the committed root docs. `progress.md` is a **local, gitignored** working board — exactly three sections (Next steps · Backlog · Completed, newest → oldest), kept updated as work lands; never add other sections.
 - **Archive, don't delete:** retired docs/artifacts go in `z_archive/` at the repo root (gitignored).
 - **Stack:** Streamlit UI · `scripts/app.py` + `scripts/indexer.py` · stdlib `sqlite3` FTS5 · index built in-memory at startup (`@st.cache_resource`). Keep it ~120–150 lines; resist scope creep. Code lives in `scripts/`; see [docs/z_scripts_inventory.md](docs/z_scripts_inventory.md).
 - **Environment:** uv-managed venv, Python 3.12 (`.python-version`). `uv sync` to set up; run with `uv run python scripts/indexer.py` / `uv run streamlit run scripts/app.py --server.port 8503` (local). The committed `config.toml` does **not** pin a port — Streamlit Community Cloud needs its default (8501), so pinning breaks deploy. `pyproject.toml` + `uv.lock` are the source of truth; `requirements.txt` is the deploy mirror.

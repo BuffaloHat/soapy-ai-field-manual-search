@@ -2,7 +2,7 @@
 
 **Created:** 2026-06-13
 **Status:** Active
-**Companion docs:** [overview.md](overview.md) · [data_inventory.md](data_inventory.md) · [eval_plan.md](eval_plan.md) · [progress.md](../progress.md) · [CLAUDE.md](../CLAUDE.md)
+**Companion docs:** [overview.md](overview.md) · [data_inventory.md](data_inventory.md) · [eval_plan.md](eval_plan.md) · [CLAUDE.md](../CLAUDE.md)
 
 ---
 
@@ -138,7 +138,7 @@ Still open:
 
 ## 10. Next Steps
 
-1. Finish the remaining planning docs (`eval_plan.md`, `progress.md`, `CLAUDE.md`).
+1. Finish the remaining planning docs (`eval_plan.md`, `CLAUDE.md`).
 2. Scaffold the repo: `git init`, `requirements.txt`, root `.gitignore`.
 3. Build `indexer.py` (parse snapshot → FTS5) and verify the coverage layer against the known TOC.
 4. Build `app.py` (gate + two-layer search UI) and run locally.

@@ -4,7 +4,7 @@
 **Status:** Active
 **Working name:** `saifm` (short for *Soapy AI Field Manual*).
 
-> Companion docs: [prd.md](prd.md) (requirements), [data_inventory.md](data_inventory.md) (corpus + refresh), [eval_plan.md](eval_plan.md) (how we judge it), [progress.md](../progress.md) (execution log), [CLAUDE.md](../CLAUDE.md) (agent context).
+> Companion docs: [prd.md](prd.md) (requirements), [data_inventory.md](data_inventory.md) (corpus + refresh), [eval_plan.md](eval_plan.md) (how we judge it), [CLAUDE.md](../CLAUDE.md) (agent context).
 
 ---
 
@@ -57,7 +57,6 @@ The headline is the manual's *structure*; the prose is only a taste.
 ```
 saifm/  (public)
 ├── README.md            ← the portfolio headline: what this is + link to live UI
-├── progress.md          ← execution log + next steps            (committed)
 ├── CLAUDE.md            ← agent project context                 (committed)
 ├── app.py               ← Streamlit gate + search UI            (committed)
 ├── indexer.py           ← parse snapshot → FTS5 index           (committed)

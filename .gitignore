@@ -8,6 +8,9 @@ data/*.db
 *.sqlite
 *.sqlite3
 
+# --- Personal working board (kept local; not part of the public repo) ---
+progress.md
+
 # --- Personal archive of retired docs/artifacts ---
 z_archive/
 
