@@ -102,7 +102,7 @@ manual (private repo)  →  compiled snapshot  →  FTS5 index  →  gated searc
 
 ## Status
 
-The corpus pipeline, planning docs, and the gated search app (Search · Manual Preview · About) are built and validated. Next: deploy the gated demo and swap the placeholder above for the live URL.
+**Live.** The gated app (Search · Manual Preview · About) is deployed on Streamlit Community Cloud at the link above — access shared on request. The corpus and preview are fetched privately at startup, so nothing proprietary lives in this repo. Remaining: a small `pytest` suite and optional polish.
 
 ---
 

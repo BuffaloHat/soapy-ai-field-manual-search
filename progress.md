@@ -6,13 +6,7 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 
 ## Next steps
 
-1. **Ship the deploy** (mechanism built — fetch-at-startup; OQ5/OQ6 resolved). Remaining, mostly manual:
-   - Create a fine-grained GitHub PAT (read-only Contents on the private manual repo).
-   - Commit `build/manual_preview.pdf` into the private manual repo.
-   - Connect the repo to Streamlit Community Cloud; main file `scripts/app.py`.
-   - Set secrets (`app_password`, `github_token`, `manual_repo`); deploy.
-   - Swap the live URL into the README.
-2. **Tests** — promote the `indexer.py` self-checks + the `app.py` AppTest smoke checks into a `pytest` suite ([docs/eval_plan.md](docs/eval_plan.md) §6 Phase 2).
+1. **Tests** — promote the `indexer.py` self-checks + the `app.py` AppTest smoke checks into a `pytest` suite ([docs/eval_plan.md](docs/eval_plan.md) §6 Phase 2).
 
 ## Backlog
 
@@ -23,6 +17,7 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 ## Completed
 
 ### 2026-06-16
+- **Shipped — the app is LIVE:** https://soapy-ai-field-manual-search.streamlit.app (gated, Streamlit Community Cloud). Made the repo public (history audited clean — no corpus/PDF/secrets ever committed); deployed `scripts/app.py` on Python 3.12; set secrets (`app_password`, read-only `github_token`, `manual_repo`); the corpus + preview are fetched privately from the manual repo at startup. Fixed the deploy: unpinned `server.port` (the committed `8503` broke Cloud's 8501 health check — pass `--server.port 8503` locally instead).
 - Resolved OQ5/OQ6 and built deploy plumbing: **Streamlit Community Cloud + fetch-at-startup**. The app loads corpus + preview from local `data/` (dev) or, when absent, fetches them from the private manual repo via the GitHub Contents API using a read-only token in secrets — so neither file enters the public repo. Refactored `indexer.parse_text()` for text input; documented secrets in `secrets.toml.example`; updated PRD/data_inventory/README. Local self-checks + AppTest still green.
 
 ### 2026-06-15
