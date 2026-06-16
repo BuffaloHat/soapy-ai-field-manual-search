@@ -8,6 +8,12 @@ The manual itself is a private work in progress. This app exists to answer one q
 
 ![Soapy AI Field Manual — the gated landing](scripts/images/1_password.png)
 
+### → [Technical Reference (PDF)](docs/saifm_technical_reference.pdf)
+*Full system reference — architecture, component deep-dives, data reference, operations.*
+
+### → [User Interface — Screenshots](#screenshots)
+*The gated search UI: coverage-first results, capped excerpts, and the Manual Preview tab.*
+
 ---
 
 ## What it does
@@ -20,35 +26,6 @@ Every search returns two layers, **coverage first**:
 Leading with structure is deliberate. The table of contents is the strongest summary of what the manual is, and it keeps the prose itself rationed.
 
 This is **not** an AI Q&A app. There is no model in the loop — no generated answers, no summarization, no embeddings. It is exact keyword search over a single corpus.
-
----
-
-## Screenshots
-
-### Search — coverage first
-A topic query answers *"where does the manual cover this?"* before showing any prose.
-
-![The Search tab](scripts/images/2_search.png)
-
-### Coverage — matching sections, grouped by chapter
-The headline result: every matching chapter and section, by number and title — the manual's table-of-contents depth at a glance.
-
-![Coverage layer for a query](scripts/images/3_search_contents.png)
-
-### Excerpts — a capped, highlighted taste
-Beneath coverage, a few short, term-highlighted excerpts — hard-capped, never a full section.
-
-![Capped, highlighted excerpts](scripts/images/4_search_excerpts.png)
-
-### Manual Preview — proof it's a real document
-A downloadable sample of the actual manuscript (Chapter 1) plus the full Parts & Chapters map.
-
-![Manual Preview tab](scripts/images/5_manual.png)
-
-### About
-The manual's overview and intent.
-
-![About tab](scripts/images/6_about.png)
 
 ---
 
@@ -103,6 +80,49 @@ manual (private repo)  →  compiled snapshot  →  FTS5 index  →  gated searc
 ## Status
 
 **Live.** The gated app (Search · Manual Preview · About) is deployed on Streamlit Community Cloud at the link above — access shared on request. The corpus and preview are fetched privately at startup, so nothing proprietary lives in this repo. Remaining: a small `pytest` suite and optional polish.
+
+---
+
+## Docs
+
+| Doc | What it is |
+| --- | --- |
+| [Technical Reference (PDF)](docs/saifm_technical_reference.pdf) | Full system reference — architecture, component deep-dives, data reference, operations |
+| [overview.md](docs/overview.md) | Intent, boundaries, and the locked architecture decisions |
+| [prd.md](docs/prd.md) | Requirements (Must / Should / May) and the content-protection model |
+| [data_inventory.md](docs/data_inventory.md) | The corpus, the format contract, and refresh cadence |
+| [eval_plan.md](docs/eval_plan.md) | How search quality and content protection are measured |
+
+These planning docs follow the methodology the manual itself teaches in *Chapter 3 — Planning Docs*.
+
+---
+
+## Screenshots
+
+### Search — coverage first
+A topic query answers *"where does the manual cover this?"* before showing any prose.
+
+![The Search tab](scripts/images/2_search.png)
+
+### Coverage — matching sections, grouped by chapter
+The headline result: every matching chapter and section, by number and title — the manual's table-of-contents depth at a glance.
+
+![Coverage layer for a query](scripts/images/3_search_contents.png)
+
+### Excerpts — a capped, highlighted taste
+Beneath coverage, a few short, term-highlighted excerpts — hard-capped, never a full section.
+
+![Capped, highlighted excerpts](scripts/images/4_search_excerpts.png)
+
+### Manual Preview — proof it's a real document
+A downloadable sample of the actual manuscript (Chapter 1) plus the full Parts & Chapters map.
+
+![Manual Preview tab](scripts/images/5_manual.png)
+
+### About
+The manual's overview and intent.
+
+![About tab](scripts/images/6_about.png)
 
 ---
 

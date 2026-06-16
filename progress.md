@@ -17,6 +17,8 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 ## Completed
 
 ### 2026-06-16
+- Added a **Technical Reference** (`docs/saifm_technical_reference.pdf`, authored in the house style: title page, mascot, system diagram, component deep-dives, data reference, ops). Reorganized the README to match the SGG/RAGlab conventions: nav links up top (Tech Reference PDF + Screenshots anchor), a `## Docs` table (tech ref + the four planning docs), screenshots moved to the bottom.
+- Professionalism pass: removed personal references / local paths from public docs (kept author bylines + LICENSE); switched this repo's git identity to a GitHub noreply email for future commits.
 - **Shipped — the app is LIVE:** https://soapy-ai-field-manual-search.streamlit.app (gated, Streamlit Community Cloud). Made the repo public (history audited clean — no corpus/PDF/secrets ever committed); deployed `scripts/app.py` on Python 3.12; set secrets (`app_password`, read-only `github_token`, `manual_repo`); the corpus + preview are fetched privately from the manual repo at startup. Fixed the deploy: unpinned `server.port` (the committed `8503` broke Cloud's 8501 health check — pass `--server.port 8503` locally instead).
 - Resolved OQ5/OQ6 and built deploy plumbing: **Streamlit Community Cloud + fetch-at-startup**. The app loads corpus + preview from local `data/` (dev) or, when absent, fetches them from the private manual repo via the GitHub Contents API using a read-only token in secrets — so neither file enters the public repo. Refactored `indexer.parse_text()` for text input; documented secrets in `secrets.toml.example`; updated PRD/data_inventory/README. Local self-checks + AppTest still green.
 
