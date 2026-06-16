@@ -36,6 +36,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import indexer  # noqa: E402
 
 IMAGE_PATH = Path(__file__).parent / "images" / "soapy_manual.jpeg"
+# Gitignored sample of the real manuscript (first 25 of 451 pages — Chapter 1 foundations).
+PREVIEW_PDF = Path(__file__).resolve().parent.parent / "data" / "manual_preview.pdf"
 
 DESCRIPTION = (
     "A gated, keyword-search view of a private field manual on building AI/LLM "
@@ -102,6 +104,17 @@ STYLES = """
 mark { background: #ffe39c; padding: 0 2px; border-radius: 2px; }
 /* Muted description line */
 .app-desc { font-size: 1.05rem; color: #555; margin-top: .25rem; }
+/* Search tab intro — pronounced */
+.search-intro { font-size: 1.3rem; font-weight: 700; color: #1a1a1a; margin: .25rem 0 .85rem 0; }
+/* Result sub-headers (coverage/excerpts notes) — accent chip so they stand out */
+.result-note {
+    display: inline-block;
+    font-size: 1.05rem; font-weight: 600; color: #333;
+    background: #fff4f4; border-left: 4px solid #ff4b4b; border-radius: 4px;
+    padding: .35rem .7rem; margin: .1rem 0 .85rem 0;
+}
+/* Per-excerpt section label (Ch X → N.M Title) — bold so it stands out above the box */
+.excerpt-label { font-size: 1rem; font-weight: 700; font-style: italic; color: #333; margin: 0 0 .15rem 0; }
 /* Manual Contents */
 .contents-part { font-weight: 700; margin: .25rem 0 .15rem 0; }
 .contents-chap { color: #444; }
@@ -156,7 +169,7 @@ def render_header() -> None:
         st.markdown("<p class='app-desc'>%s</p>" % DESCRIPTION, unsafe_allow_html=True)
 
 
-def render_chapters_tab() -> None:
+def render_contents() -> None:
     st.markdown("#### Manual Contents — Parts & Chapters")
     cols = st.columns(2)
     half = (len(PARTS) + 1) // 2
@@ -176,6 +189,30 @@ def render_chapters_tab() -> None:
 def render_about_tab() -> None:
     st.markdown("#### Overview")
     st.markdown(OVERVIEW)
+
+
+@st.cache_data
+def _preview_bytes():
+    return PREVIEW_PDF.read_bytes() if PREVIEW_PDF.exists() else None
+
+
+def render_preview_tab() -> None:
+    st.markdown("#### Manual Preview")
+    st.markdown(
+        "<p class='app-desc' style='font-weight:700; color:#1a1a1a;'>Download the opening "
+        "foundations chapter (25 of 451 pages) to read the real writing — a taste of the full "
+        "manuscript. The complete chapter map is below.</p>",
+        unsafe_allow_html=True,
+    )
+    data = _preview_bytes()
+    if data:
+        st.download_button("Download Manual Preview (PDF)", data=data,
+                           file_name="Soapy_AI_Field_Manual_Sample_ch1.pdf",
+                           mime="application/pdf")
+    else:
+        st.info("The preview isn't available in this environment.")
+    st.divider()
+    render_contents()
 
 
 def _attempt_login() -> None:
@@ -215,8 +252,9 @@ def render_coverage(coverage) -> None:
         )
     n_sec, n_ch = len(coverage), len(by_chapter)
     st.markdown("### Coverage")
-    st.caption("Found in %d section%s across %d chapter%s."
-               % (n_sec, "" if n_sec == 1 else "s", n_ch, "" if n_ch == 1 else "s"))
+    st.markdown("<p class='result-note'>Found in %d section%s across %d chapter%s.</p>"
+                % (n_sec, "" if n_sec == 1 else "s", n_ch, "" if n_ch == 1 else "s"),
+                unsafe_allow_html=True)
     for (cnum, ctitle), secs in by_chapter.items():
         sec_line = " · ".join("**%s** %s" % (num, title) for num, title in secs)
         st.markdown("**Ch %d — %s**  \n%s" % (cnum, ctitle, sec_line))
@@ -224,10 +262,11 @@ def render_coverage(coverage) -> None:
 
 def render_excerpts(excerpts) -> None:
     st.markdown("### Excerpts")
-    st.caption("A few short, capped tidbits — not full sections.")
+    st.markdown("<p class='result-note'>A few short, capped tidbits — not full sections.</p>",
+                unsafe_allow_html=True)
     for ch, sec, title, snip in excerpts:
         label = "Ch %d → %s %s" % (ch, sec, title) if sec else "Ch %d" % ch
-        st.markdown("<small><em>%s</em></small>" % html.escape(label), unsafe_allow_html=True)
+        st.markdown("<p class='excerpt-label'>%s</p>" % html.escape(label), unsafe_allow_html=True)
         st.markdown(
             "<div style='margin:0 0 1rem 0;padding:.5rem .75rem;border-left:3px solid #ccc;"
             "background:rgba(127,127,127,.08)'>%s</div>" % render_snippet(snip),
@@ -236,10 +275,10 @@ def render_excerpts(excerpts) -> None:
 
 
 def render_search() -> None:
-    st.markdown("<p class='app-desc'>%s</p>" % SEARCH_INTRO, unsafe_allow_html=True)
+    st.markdown("<p class='search-intro'>%s</p>" % SEARCH_INTRO, unsafe_allow_html=True)
     con = get_index()
     with st.form("search"):
-        query = st.text_input("Search the manual", key="search",
+        query = st.text_input("**Search the manual:**", key="search",
                               placeholder="e.g. MCP, agent evaluation, reranking, prompt caching")
         submitted = st.form_submit_button("Search")
 
@@ -272,11 +311,11 @@ def main() -> None:
         render_gate()
         return
 
-    tab_search, tab_chapters, tab_about = st.tabs(["Search", "Chapters", "About"])
+    tab_search, tab_preview, tab_about = st.tabs(["Search", "Manual Preview", "About"])
     with tab_search:
         render_search()
-    with tab_chapters:
-        render_chapters_tab()
+    with tab_preview:
+        render_preview_tab()
     with tab_about:
         render_about_tab()
 

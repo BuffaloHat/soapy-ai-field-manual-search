@@ -104,6 +104,8 @@ The structural decisions are now settled; see [overview.md](overview.md) §3 for
 
 **Honest limit (fact, not solvable):** anything rendered in a browser can be copied; the FTS index must store the full prose to search and snippet it. These measures make casual copying low-value and bulk scraping slow; they do not make extraction impossible. This is accepted.
 
+**Intentional exception — the gated sample.** The "Manual Preview" tab offers a downloadable 25-page excerpt (Chapter 1 foundations, ~5% of the manuscript) to gated viewers. This is a deliberate, bounded relaxation: it proves the work is a real, living document rather than a database. Scope is fixed (the least-proprietary intro chapter), it sits behind the password, and the PDF lives in gitignored `data/` — never committed to the public repo (it reaches the host via the same private channel as the corpus, OQ6).
+
 ---
 
 ## 8. Feasibility & Cost
