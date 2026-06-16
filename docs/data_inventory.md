@@ -65,7 +65,9 @@ Anything outside this contract (HTML wrapper divs, image links, attachment refs)
 
 ## 4. Delivery & refresh cadence
 
-The manual is **edited continuously** (sections added, rewritten, deleted). The app is only as current as the last snapshot delivered. Delivery is **push-on-build**: `build_manuscript.py` mirrors a copy straight into `saifm/data/` as part of its run.
+**Two delivery paths, same source.** Locally the corpus + preview load from `data/`; when those files are absent (deploy), the app fetches them from the **private manual repo** via the GitHub Contents API using a read-only token (`github_token` + `manual_repo` in secrets — see [prd.md](prd.md) OQ6). Neither file ever enters this public repo. Deploy refresh = commit the updated `build/manuscript_review.md` (and `build/manual_preview.pdf`) to the private repo, then reboot the Streamlit Cloud app.
+
+The manual is **edited continuously** (sections added, rewritten, deleted). The app is only as current as the last snapshot delivered. Local delivery is **push-on-build**: `build_manuscript.py` mirrors a copy straight into `saifm/data/` as part of its run.
 
 ```
 1. (manual repo)  python scripts/build_manuscript.py --mode review

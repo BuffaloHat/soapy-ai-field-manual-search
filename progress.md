@@ -6,7 +6,12 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 
 ## Next steps
 
-1. **Deploy (the keystone)** — resolve OQ5/OQ6 (host + how the private corpus *and* `manual_preview.pdf` reach it), deploy gated, then swap the live URL into the README.
+1. **Ship the deploy** (mechanism built — fetch-at-startup; OQ5/OQ6 resolved). Remaining, mostly manual:
+   - Create a fine-grained GitHub PAT (read-only Contents on the private manual repo).
+   - Commit `build/manual_preview.pdf` into the private manual repo.
+   - Connect the repo to Streamlit Community Cloud; main file `scripts/app.py`.
+   - Set secrets (`app_password`, `github_token`, `manual_repo`); deploy.
+   - Swap the live URL into the README.
 2. **Tests** — promote the `indexer.py` self-checks + the `app.py` AppTest smoke checks into a `pytest` suite ([docs/eval_plan.md](docs/eval_plan.md) §6 Phase 2).
 
 ## Backlog
@@ -16,6 +21,9 @@ Working board. Three sections only: **Next steps**, **Backlog**, **Completed** (
 - Expand the golden query set to ~20–30 entries.
 
 ## Completed
+
+### 2026-06-16
+- Resolved OQ5/OQ6 and built deploy plumbing: **Streamlit Community Cloud + fetch-at-startup**. The app loads corpus + preview from local `data/` (dev) or, when absent, fetches them from the private manual repo via the GitHub Contents API using a read-only token in secrets — so neither file enters the public repo. Refactored `indexer.parse_text()` for text input; documented secrets in `secrets.toml.example`; updated PRD/data_inventory/README. Local self-checks + AppTest still green.
 
 ### 2026-06-15
 - Added screenshots to the README: hero gated-landing shot + a Screenshots gallery (Search, Coverage, Excerpts, Manual Preview, About) in `scripts/images/`; refreshed the Status section. (A capped-excerpt screenshot intentionally shows a tame prose taste — consistent with the gated 25-page sample.)

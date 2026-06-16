@@ -127,13 +127,13 @@ The structural decisions are now settled; see [overview.md](overview.md) §3 for
 
 ## 9. Open Questions / Decisions Pending
 
-Already resolved: repo placement (standalone public repo), content sync (push-on-build mirror of `soapy_ai_manual.md`), agent-context file (`CLAUDE.md`).
+Already resolved: repo placement (standalone public repo), content sync (push-on-build mirror of `soapy_ai_manual.md`), agent-context file (`CLAUDE.md`), exact caps (OQ3 — ~700 chars × 5), deploy (OQ5/OQ6 below).
+
+- **OQ5. Deploy target.** **Resolved (2026-06-16): Streamlit Community Cloud** — free, deploys from the GitHub repo, password via its secrets manager. No Docker.
+- **OQ6. Private-corpus delivery to host.** **Resolved (2026-06-16): fetch-at-startup.** The app loads the corpus + preview PDF from local `data/` if present (dev), else fetches them from the **private manual repo** via the GitHub Contents API using a read-only token in secrets (`github_token`, `manual_repo`). Neither file ever enters this public repo. The same mechanism delivers `manual_preview.pdf`.
 
 Still open:
-- **OQ3. Exact caps.** ~700 chars/excerpt × 5 excerpts (chosen 2026-06-14). Revisit if excerpt context work changes the exposure profile.
 - **OQ4. Coverage display depth.** Show every matching section, or top N? Show a match count per chapter?
-- **OQ5. Deploy target.** Streamlit Community Cloud vs. alternative.
-- **OQ6. Private-corpus delivery to host.** The corpus can't live in the public repo, but the running app needs it. Options: bake it into a deploy image from a private source, fetch it at startup from private storage, or build the index locally and ship only the DB. This is the one real deploy knot (also tracked as DI-3). **Gates first deploy, not local development.**
 
 ---
 

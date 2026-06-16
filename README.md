@@ -19,7 +19,7 @@ Every search returns two layers, **coverage first**:
 
 Leading with structure is deliberate. The table of contents is the strongest summary of what the manual is, and it keeps the prose itself rationed.
 
-This is **not** an AI Q&A app. There is no model in the loop — no generated answers, no summarization, no embeddings. It is exact keyword search over a single corpus. (That choice is itself a design statement: the simplest tool that meets the goal.)
+This is **not** an AI Q&A app. There is no model in the loop — no generated answers, no summarization, no embeddings. It is exact keyword search over a single corpus.
 
 ---
 
@@ -90,13 +90,13 @@ manual (private repo)  →  compiled snapshot  →  FTS5 index  →  gated searc
 
 - **Single shared password.** No accounts, no per-user identity — access is shared deliberately with people who ask.
 - **The manuscript stays private.** The full prose is never committed to this repository and never sent whole to the browser. Searches return only the coverage labels and a few capped excerpts (a small character limit per excerpt, a small number of excerpts per query, no browsing, no pagination, no "show full section").
-- **Honest about its limits.** Anything rendered in a browser can be copied; these measures make casual copying low-value and bulk extraction slow, not impossible. That trade-off is accepted on purpose — the goal is a showcase, not DRM.
+- **Honest about its limits.** Anything rendered in a browser can be copied; these measures make casual copying low-value and bulk extraction slow. That trade-off is accepted on purpose — the goal is a showcase, not DRM.
 
 ---
 
 ## Tech stack
 
-`Python` · `Streamlit` · `SQLite FTS5` (stdlib `sqlite3`) · no LLM, no API keys, no external services.
+`Python` · `Streamlit` · `SQLite FTS5` (stdlib `sqlite3`) · no LLM, no inference, no external search service. (On the hosted demo the gitignored corpus is fetched once at startup from a private repo — see *Content & access*.)
 
 ---
 

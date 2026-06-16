@@ -26,6 +26,7 @@ from __future__ import annotations
 import html
 import os
 import sys
+import urllib.request
 from collections import OrderedDict
 from pathlib import Path
 
@@ -133,20 +134,61 @@ mark { background: #ffe39c; padding: 0 2px; border-radius: 2px; }
 """
 
 
-@st.cache_resource
-def get_index():
-    """Parse the snapshot and build the FTS5 index once per process."""
-    return indexer.build_index()
+def _secret(key, default=None):
+    """Read a value from Streamlit secrets, falling back to an env var (UPPER), else default."""
+    try:
+        if key in st.secrets:
+            return st.secrets[key]
+    except Exception:
+        pass
+    return os.environ.get(key.upper(), default)
 
 
 def expected_password():
-    """Shared password from Streamlit secrets, falling back to an env var for local dev."""
+    """Shared password from secrets / env (SAIFM_PASSWORD for local dev)."""
+    return _secret("app_password", os.environ.get("SAIFM_PASSWORD"))
+
+
+def _fetch_private_file(path):
+    """Raw bytes of a file in the private manual repo via the GitHub Contents API.
+
+    Deploy (Streamlit Cloud) sets `github_token` + `manual_repo` in secrets so the
+    gitignored corpus/preview never need to live in this public repo. Returns None
+    on any failure (missing config, auth, network) so the app degrades gracefully.
+    """
+    token, repo = _secret("github_token"), _secret("manual_repo")
+    if not (token and repo and path):
+        return None
+    ref = _secret("manual_branch", "main")
+    url = "https://api.github.com/repos/%s/contents/%s?ref=%s" % (repo, path, ref)
+    req = urllib.request.Request(url, headers={
+        "Authorization": "Bearer %s" % token,
+        "Accept": "application/vnd.github.raw",
+        "User-Agent": "saifm-app",
+    })
     try:
-        if "app_password" in st.secrets:
-            return st.secrets["app_password"]
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return resp.read()
     except Exception:
-        pass
-    return os.environ.get("SAIFM_PASSWORD")
+        return None
+
+
+@st.cache_data(show_spinner=False)
+def get_corpus_text():
+    """Corpus markdown: local file if present (dev), else fetched from the private repo (deploy)."""
+    if indexer.DATA_FILE.exists():
+        return indexer.DATA_FILE.read_text(encoding="utf-8")
+    data = _fetch_private_file(_secret("corpus_path", "build/manuscript_review.md"))
+    return data.decode("utf-8") if data else ""
+
+
+@st.cache_resource(show_spinner=False)
+def get_index():
+    """Build the FTS5 index once per process from the corpus (local or fetched)."""
+    text = get_corpus_text()
+    if not text.strip():
+        return None
+    return indexer.build_index(indexer.parse_text(text))
 
 
 def authed() -> bool:
@@ -191,9 +233,12 @@ def render_about_tab() -> None:
     st.markdown(OVERVIEW)
 
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def _preview_bytes():
-    return PREVIEW_PDF.read_bytes() if PREVIEW_PDF.exists() else None
+    """Preview PDF: local file if present (dev), else fetched from the private repo (deploy)."""
+    if PREVIEW_PDF.exists():
+        return PREVIEW_PDF.read_bytes()
+    return _fetch_private_file(_secret("preview_path", "build/manual_preview.pdf"))
 
 
 def render_preview_tab() -> None:
@@ -277,6 +322,10 @@ def render_excerpts(excerpts) -> None:
 def render_search() -> None:
     st.markdown("<p class='search-intro'>%s</p>" % SEARCH_INTRO, unsafe_allow_html=True)
     con = get_index()
+    if con is None:
+        st.error("The manual corpus couldn't be loaded — check the deploy secrets "
+                 "(`github_token`, `manual_repo`).")
+        return
     with st.form("search"):
         query = st.text_input("**Search the manual:**", key="search",
                               placeholder="e.g. MCP, agent evaluation, reranking, prompt caching")

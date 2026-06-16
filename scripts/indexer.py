@@ -85,8 +85,12 @@ def _clean(line: str) -> str:
 
 
 def parse_corpus(path: Path = DATA_FILE) -> List[Paragraph]:
-    raw = path.read_text(encoding="utf-8")
+    """Parse the corpus from a local file (local dev + self-checks)."""
+    return parse_text(path.read_text(encoding="utf-8"))
 
+
+def parse_text(raw: str) -> List[Paragraph]:
+    """Parse corpus markdown text into searchable, context-merged paragraphs."""
     # Split into (source_path, lines) blocks on Source markers.
     blocks: List[Tuple[str, List[str]]] = []
     cur_src: Optional[str] = None
