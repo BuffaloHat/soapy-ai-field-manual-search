@@ -4,15 +4,16 @@ A gated, keyword-search interface to the **Soapy AI Field Manual**: a personal, 
 
 The manual itself is a private work in progress. This app exists to answer one question for anyone curious about it — *"does it actually cover \<topic\>, and how deeply?"* — without handing over the manuscript. You search a topic; it returns **where** the manual covers it (the relevant chapters and sections) and a few short excerpts as a taste of the prose.
 
-**Live demo:** https://soapy-ai-field-manual-search.streamlit.app *(password-gated — access shared on request)*
+## Live Search Application
+https://soapy-ai-field-manual-search.streamlit.app ***(password-gated — access shared on request)***
 
 ![Soapy AI Field Manual — the gated landing](scripts/images/1_password.png)
 
-### → [Technical Reference (PDF)](docs/saifm_technical_reference.pdf)
-*Full system reference — architecture, component deep-dives, data reference, operations.*
-
 ### → [User Interface — Screenshots](#screenshots)
 *The gated search UI: coverage-first results, capped excerpts, and the Manual Preview tab.*
+
+### → [Technical Reference (PDF)](docs/saifm_technical_reference.pdf)
+*Full system reference — architecture, component deep-dives, data reference, operations.*
 
 ---
 
