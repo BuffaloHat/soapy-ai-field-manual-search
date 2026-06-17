@@ -2,7 +2,7 @@
 
 A gated, keyword-search interface to the **Soapy AI Field Manual**: a personal, implementation-first field manual for building AI/LLM systems end-to-end.
 
-The manual itself is a private work in progress. This app exists to answer one question for anyone curious about it — *"does it actually cover \<topic\>, and how deeply?"* — without handing over the manuscript. You search a topic; it returns **where** the manual covers it (the relevant chapters and sections) and a few short excerpts as a taste of the prose.
+The manual itself is a private work in progress. This app exists to answer questions for anyone curious about it — *"does the manual cover \<topic\>, and how deeply?"* — without handing over the manuscript. The user searches a topic; it returns **where** the manual covers it (the relevant chapters and sections) and a few short excerpts as a taste of the prose.
 
 ## Live Search Application
 https://soapy-ai-field-manual-search.streamlit.app ***(password-gated — access shared on request)***
@@ -115,8 +115,8 @@ Beneath coverage, a few short, term-highlighted excerpts — hard-capped, never 
 
 ![Capped, highlighted excerpts](scripts/images/4_search_excerpts.png)
 
-### Manual Preview — proof it's a real document
-A downloadable sample of the actual manuscript (Chapter 1) plus the full Parts & Chapters map.
+### Preview of Soapy AI Field Manual 
+A downloadable sample of the first 25-pages of the actual manuscript (TOC and Chapter 1).
 
 ![Manual Preview tab](scripts/images/5_manual.png)
 
