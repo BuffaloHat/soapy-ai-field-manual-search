@@ -35,6 +35,7 @@ import streamlit as st
 # Make the sibling module importable regardless of launcher (streamlit run / AppTest / pytest).
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import indexer  # noqa: E402
+import cloud  # noqa: E402
 
 IMAGE_PATH = Path(__file__).parent / "images" / "soapy_manual.jpeg"
 # Gitignored sample of the real manuscript (first 25 of 451 pages — Chapter 1 foundations).
@@ -191,6 +192,15 @@ def get_index():
     return indexer.build_index(indexer.parse_text(text))
 
 
+@st.cache_data(show_spinner=False)
+def get_cloud_html():
+    """Build the Topic Cloud markup once per process ('' if corpus unavailable)."""
+    text = get_corpus_text()
+    if not text.strip():
+        return ""
+    return cloud.build_html(indexer.parse_text(text))
+
+
 def authed() -> bool:
     return bool(st.session_state.get("authed"))
 
@@ -231,6 +241,21 @@ def render_contents() -> None:
 def render_about_tab() -> None:
     st.markdown("#### Overview")
     st.markdown(OVERVIEW)
+
+
+def render_cloud_tab() -> None:
+    st.markdown("#### Topic Cloud")
+    st.markdown(
+        "<p class='app-desc' style='font-weight:700; color:#1a1a1a;'>A jumping-off point for "
+        "Search — the concepts this manual covers, sized by how much ground each gets. Spot one "
+        "that interests you, then search it.</p>",
+        unsafe_allow_html=True,
+    )
+    markup = get_cloud_html()
+    if markup:
+        st.markdown(markup, unsafe_allow_html=True)
+    else:
+        st.info("The topic cloud isn't available in this environment.")
 
 
 @st.cache_data(show_spinner=False)
@@ -360,9 +385,12 @@ def main() -> None:
         render_gate()
         return
 
-    tab_search, tab_preview, tab_about = st.tabs(["Search", "Manual Preview", "About"])
+    tab_search, tab_cloud, tab_preview, tab_about = st.tabs(
+        ["Search", "Topic Cloud", "Manual Preview", "About"])
     with tab_search:
         render_search()
+    with tab_cloud:
+        render_cloud_tab()
     with tab_preview:
         render_preview_tab()
     with tab_about:
