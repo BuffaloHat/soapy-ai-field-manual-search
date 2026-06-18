@@ -82,7 +82,7 @@ manual (private repo)  →  compiled snapshot  →  FTS5 index  →  gated searc
 
 ## Status
 
-**Live.** The gated app (Search · Topic Cloud · Manual Preview · About) is deployed on Streamlit Community Cloud at the link above — access shared on request. The corpus and preview are fetched privately at startup, so nothing proprietary lives in this repo. Remaining: a small `pytest` suite and optional polish.
+**Live.** The gated app (Search · Topic Cloud · Manual Preview · About) is deployed on Streamlit Community Cloud at the link above — access shared on request. The corpus and preview are fetched privately at startup, so nothing proprietary lives in this repo. A deterministic `pytest` suite (`uv run pytest`) covers search coverage, the output caps, and query hygiene — no network, no model.
 
 ---
 

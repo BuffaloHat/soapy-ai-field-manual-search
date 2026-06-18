@@ -11,3 +11,10 @@ dependencies = [
 # This is an app, not a distributable package — don't try to build/install the project itself.
 [tool.uv]
 package = false
+
+# Dev-only; not in requirements.txt (the deploy mirror) since the host never runs tests.
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

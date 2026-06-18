@@ -77,9 +77,23 @@ Run after each corpus refresh to confirm the parse still matches the format cont
 
 ## 6. How we run it
 
-- **Phase 1 (now):** these are acceptance criteria, not code. They shape `indexer.py` and `app.py`.
-- **Phase 2 (with the indexer):** §2 golden set and §5 integrity checks become a small `pytest` fixture runnable against `data/soapy_ai_manual.md` — fast, no network, no model.
-- **Phase 3 (with the app):** §3 protection and §4 hygiene checks run against the search function directly (unit-level), plus a manual click-through of the gate and result states.
+These checks are now a **`pytest` suite** in `tests/` — run it with:
+
+```
+uv run pytest          # fast (~0.6s), no network, no model
+```
+
+The suite mirrors the sections above, against the local corpus snapshot:
+
+| File | Covers |
+| --- | --- |
+| `tests/test_golden.py` | §2 golden set (G2), parametrized over the query set |
+| `tests/test_protection.py` | §3 caps — P1 (char), P2 (count/coverage), P3 (one excerpt per section) |
+| `tests/test_hygiene.py` | §4 — Q1 low-signal rejection, Q2 no-results, Q3 casing |
+| `tests/test_integrity.py` | §5 — I1 chapters, I2 section labels, I3 cleaning, I4 non-empty |
+| `tests/test_cloud.py` | Topic Cloud — I5 (`SPRINKLE ⊆ CANONICAL_TAGS` + non-empty), P6 prose-free |
+
+Session-scoped fixtures in `conftest.py` parse the corpus and build the index once, and **skip** cleanly if the snapshot isn't present (fresh clone / CI without `data/`). `pytest` is a uv dev-dependency (`[dependency-groups] dev`), not in the deploy mirror. The gate checks (P4/P5) and a final visual click-through of the result states stay a manual step.
 
 **Definition of "good enough to share":** G1–G5 hold, all P-checks pass, the golden set has full expected-section recall, and the no-results/rejected states look intentional.
 
