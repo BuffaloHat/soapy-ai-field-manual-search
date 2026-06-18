@@ -51,6 +51,7 @@ These guard the content-protection model (PRD §7). Treat any failure as release
 - **P3 — No whole-section leak.** Concatenating all excerpts for one query never reconstructs a full section; there is no parameter (page, offset, "show more") that returns additional prose.
 - **P4 — Server-side only.** The client response contains only the gate result, coverage labels, and capped excerpts — never the raw corpus or a section body. Inspect the actual payload.
 - **P5 — Gate cannot be bypassed.** No search endpoint/action returns content before the password check passes in `session_state`.
+- **P6 — Topic Cloud is prose-free.** The Topic Cloud output contains only vocabulary tokens and their sizes (aggregate section counts) — never paragraph text or excerpts. It is a structural surface, not a prose one.
 
 ---
 
@@ -70,6 +71,7 @@ Run after each corpus refresh to confirm the parse still matches the format cont
 - **I2 — Section labels.** Section numbers/titles parsed from headings match the TOC (spot-check a sample, e.g. 13.1–13.8).
 - **I3 — Cleaning.** No HTML wrapper divs, image links, or attachment refs survive into indexed text.
 - **I4 — Non-empty rows.** No indexed paragraph is empty or structural-only.
+- **I5 — Topic Cloud vocabulary.** `cloud.SPRINKLE` keys are a subset of `cloud.CANONICAL_TAGS` (enforced by an `assert` at import), and `cloud.topic_frequencies` returns a non-empty mapping for the current corpus.
 
 ---
 

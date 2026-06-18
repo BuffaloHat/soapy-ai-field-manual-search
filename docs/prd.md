@@ -72,6 +72,7 @@ Leading with structure is both the strongest pitch (it shows how thoroughly the 
 - **May1.** Per-session or per-IP rate limiting to blunt automated term-sweeping.
 - **May2.** A short "About this manual" panel (TOC overview, chapter count, build date from the manifest) as standing showcase context.
 - **May3.** Light usage logging (query counts) to see what visitors search for.
+- **May4. Topic Cloud *(delivered 2026-06-17).*** A gated tab showing a coverage map of the manual's concepts — a curated core of concept phrases plus a sprinkle of canonical topic tags (and `RAG`), sized by how many sections cover each. Keyword-derived (no LLM), exposes only aggregate counts (no prose). Serves as a second showcase surface and a jumping-off point into Search. See [saifm_technical_reference.pdf](saifm_technical_reference.pdf) §3.4.
 
 ---
 
@@ -100,6 +101,8 @@ The structural decisions are now settled; see [overview.md](overview.md) §3 for
 **Decision (author):** Pragmatic. Snippet caps on the full corpus are sufficient. A determined scraper is explicitly out of scope — not worth design effort to stop.
 
 **Mitigations in scope:** server-side search with snippets-only to the client (M6), hard snippet caps (M5), search-only with no browse/pagination (M5), low-signal query rejection (S3), optional rate limiting (May1). Leading with the coverage/TOC layer also rations prose by design. The corpus is gitignored, so it never enters the public repo (see [data_inventory.md](data_inventory.md) §5).
+
+**Topic Cloud — no new exposure.** The Topic Cloud tab (May4) renders only aggregate term-coverage counts, never prose, so it adds nothing to the attack surface; if anything it leans even harder into the structure-over-prose framing.
 
 **Honest limit (fact, not solvable):** anything rendered in a browser can be copied; the FTS index must store the full prose to search and snippet it. These measures make casual copying low-value and bulk scraping slow; they do not make extraction impossible. This is accepted.
 
