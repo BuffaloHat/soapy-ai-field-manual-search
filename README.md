@@ -117,6 +117,11 @@ Beneath coverage, a few short, term-highlighted excerpts — hard-capped, never 
 
 ![Capped, highlighted excerpts](scripts/images/4_search_excerpts.png)
 
+### Topic Cloud — what the manual covers
+A coverage map of the manual's concepts, sized by how much ground each one covers — a quick way to see what's inside and pick something to search.
+
+![Topic Cloud tab](scripts/images/4.5_topic_cloud.png)
+
 ### Preview of Soapy AI Field Manual 
 A downloadable sample of the first 25-pages of the actual manuscript (TOC and Chapter 1).
 
