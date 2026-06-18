@@ -26,6 +26,8 @@ Every search returns two layers, **coverage first**:
 
 Leading with structure is deliberate. The table of contents is the strongest summary of what the manual is, and it keeps the prose itself rationed.
 
+A **Topic Cloud** tab complements search: a coverage map of the manual's concepts — sized by how much ground each one covers — so you can see what's inside at a glance and pick something to search.
+
 This is **not** an AI Q&A app. There is no model in the loop — no generated answers, no summarization, no embeddings. It is exact keyword search over a single corpus.
 
 ---
@@ -80,7 +82,7 @@ manual (private repo)  →  compiled snapshot  →  FTS5 index  →  gated searc
 
 ## Status
 
-**Live.** The gated app (Search · Manual Preview · About) is deployed on Streamlit Community Cloud at the link above — access shared on request. The corpus and preview are fetched privately at startup, so nothing proprietary lives in this repo. Remaining: a small `pytest` suite and optional polish.
+**Live.** The gated app (Search · Topic Cloud · Manual Preview · About) is deployed on Streamlit Community Cloud at the link above — access shared on request. The corpus and preview are fetched privately at startup, so nothing proprietary lives in this repo. Remaining: a small `pytest` suite and optional polish.
 
 ---
 
